@@ -33,7 +33,7 @@ public class Configuracion extends WsConfigurerAdapter{
         DefaultWsdl11Definition wsdl = new DefaultWsdl11Definition();
         wsdl.setPortTypeName("saludosPort");        
         wsdl.setLocationUri("/ws");   
-        wsdl.setTargetNamespace("https://perreriaLomos.uv.mx/saludos");        
+        wsdl.setTargetNamespace("https://perreriaLomos.uv.mx/lomitos");        
         wsdl.setSchema(saludosSchema);
         return wsdl;
     }

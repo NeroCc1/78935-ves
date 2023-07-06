@@ -8,112 +8,49 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import https.perrerialomos_uv_mx.saludos.BorrarRequest;
-
-
-import https.perrerialomos_uv_mx.saludos.BuscarPorIdResponse;
-import https.perrerialomos_uv_mx.saludos.BuscarTodoResponse;
-import https.perrerialomos_uv_mx.saludos.ActualizarRequest;
-import https.perrerialomos_uv_mx.saludos.ActualizarResponse;
-import https.perrerialomos_uv_mx.saludos.BorrarResponse;
-import https.perrerialomos_uv_mx.saludos.BuscarPorIdRequest;
-import https.perrerialomos_uv_mx.saludos.SaludarRequest;
-import https.perrerialomos_uv_mx.saludos.SaludarResponse;
+import https.perrerialomos_uv_mx.lomitos.ModificarRegisRequest;
+import https.perrerialomos_uv_mx.lomitos.ModificarRegisResponse;
+//import https.perrerialomos_uv_mx.saludos.SaludarPeRequest;
+//import https.perrerialomos_uv_mx.saludos.SaludarPeResponse;
 
 
 @Endpoint
 public class EndPoint {
     @Autowired
     private ISaludadores isaludador;
-
-    @PayloadRoot(namespace = "https://perreriaLomos.uv.mx/saludos", localPart = "SaludarRequest")
+/*
+    @PayloadRoot(namespace = "https://perreriaLomos.uv.mx/saludos", localPart = "SaludarPeRequest")
     @ResponsePayload
-    public SaludarResponse Saludar(@RequestPayload SaludarRequest peticion) {
-        SaludarResponse respuesta = new SaludarResponse();
-        Saludador saludador = new Saludador();
-
-        saludador.setNombre(peticion.getNombre());
-
-        isaludador.save(saludador);
-
+    public SaludarPeResponse Saludar(@RequestPayload SaludarPeRequest peticion) {
+        SaludarPeResponse respuesta = new SaludarPeResponse();
         respuesta.setRespuesta("Hola " + peticion.getNombre());
 
+        Saludador saludador = new Saludador();
+        saludador.setNombre(peticion.getNombre());
+        isaludador.save(saludador);       
         return respuesta;
     }
-
-    @PayloadRoot(namespace = "https://perreriaLomos.uv.mx/saludos", localPart = "BuscarPorIdRequest")
+*/
+    @PayloadRoot(namespace = "https://perreriaLomos.uv.mx/lomitos", localPart = "ModificarRegisRequest")
     @ResponsePayload
-    public BuscarPorIdResponse Buscar(@RequestPayload BuscarPorIdRequest peticion) {
-        BuscarPorIdResponse respuesta = new BuscarPorIdResponse();
-
-        Optional<Saludador> resultado = isaludador.findById(peticion.getId());
-        
-        if(!resultado.isPresent()){
-            respuesta.setRespuesta("Saludo no encontrado");
-            
-            return respuesta;
-        }
-        
-        Saludador saludador = resultado.get();
-
-        respuesta.setRespuesta("Hola " + saludador.getNombre());
-
-        return respuesta;
-    }
-
-    @PayloadRoot(namespace = "https://perreriaLomos.uv.mx/saludos", localPart = "ActualizarRequest")
-    @ResponsePayload
-    public ActualizarResponse Actualizar(@RequestPayload ActualizarRequest peticion) {
-        ActualizarResponse respuesta = new ActualizarResponse();
+    public ModificarRegisResponse Actualizar(@RequestPayload ModificarRegisRequest peticion) {
+        ModificarRegisResponse respuesta = new ModificarRegisResponse();
 
         Optional<Saludador> resultado = isaludador.findById(peticion.getId());
 
         if(!resultado.isPresent()) {
-            respuesta.setRespuesta("Saludo no encontrado no encontrado");
+            respuesta.setRespuesta("Lomito no encontrado no encontrado");
 
             return respuesta;
         }
         
         Saludador saludador = resultado.get();
         saludador.setNombre(peticion.getNombre());
+        saludador.setRaza(peticion.getRaza());
+        saludador.setEdad(peticion.getEdad());
 
         isaludador.save(saludador);
         respuesta.setRespuesta("Actualización realizada con éxito");
-
-        return respuesta;
-    }
-
-    @PayloadRoot(namespace = "https://perreriaLomos.uv.mx/saludos", localPart = "BorrarRequest")
-    @ResponsePayload
-    public BorrarResponse Borrar(@RequestPayload BorrarRequest peticion) {
-        BorrarResponse respuesta = new BorrarResponse();
-
-        Optional<Saludador> resultado = isaludador.findById(peticion.getId());
-
-        if(!resultado.isPresent()) {
-            respuesta.setRespuesta("Saludo no encontrado no encontrado");
-
-            return respuesta;
-        }
-
-        Saludador saludador = resultado.get();
-        
-        isaludador.delete(saludador);
-        respuesta.setRespuesta("Eliminado con éxito");
-
-        return respuesta;
-    }
-
-    @PayloadRoot(namespace = "https://perreriaLomos.uv.mx/saludos", localPart = "BuscarTodoRequest")
-    @ResponsePayload
-    public BuscarTodoResponse Borrar() {
-        BuscarTodoResponse respuesta = new BuscarTodoResponse();
-        
-        Iterable<Saludador> resultado = isaludador.findAll();
-
-        for (Saludador saludador : resultado) {
-            respuesta.getRespuesta().add(saludador.getNombre());
-        }
 
         return respuesta;
     }
